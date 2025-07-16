@@ -13,6 +13,7 @@ Why this matters:
     Explores cutting-edge theories about time's quantum nature
 
 Technical highlights:
+
 (+) FPGA-accelerated physics engine
 
     Real-time dilation calculations using √(1 - 2GM/rc²)
