@@ -16,24 +16,24 @@ for pkg in base-devel bc; do
     fi
 done
 
-# Forza locale inglese per numeri decimali
+# Force English locale for decimal numbers
 export LC_NUMERIC="C"
 export LANG="C"
 
-# Configurazione globale
-FPGA_DEVICE="/dev/ttyUSB0"  # Adatta al tuo dispositivo FPGA
-SIMULATION_TIME=3600        # Tempo simulazione in secondi
-ALTITUDE_STEP=1000          # Step altitudine in metri
-MAX_ALTITUDE=100000         # Altitudine massima
-QUANTUM_RESOLUTION=1000000  # Risoluzione temporale quantistica (nanosec)
+# Global Configuration
+FPGA_DEVICE="/dev/ttyUSB0"  # Adapt to your FPGA device
+SIMULATION_TIME=3600        # Simulation time in seconds
+ALTITUDE_STEP=1000          # Altitude step in meters
+MAX_ALTITUDE=100000         # Maximum altitude
+QUANTUM_RESOLUTION=1000000  # Quantum time resolution (nanoseconds)
 
-# Costanti fisiche
-EARTH_RADIUS=6371000        # Raggio Terra in metri
-GRAVITY_EARTH=9.81          # Accelerazione gravitazionale
-SPEED_LIGHT=299792458       # Velocità della luce m/s
-SCHWARZSCHILD_RADIUS=0.0089 # Raggio di Schwarzschild Terra in metri
+# Physical Constants
+EARTH_RADIUS=6371000        # Earth radius in meters
+GRAVITY_EARTH=9.81          # Gravitational acceleration
+SPEED_LIGHT=299792458       # Speed of light m/s
+SCHWARZSCHILD_RADIUS=0.0089 # Earth's Schwarzschild radius in meters
 
-# Colori per output
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -46,7 +46,7 @@ NC='\033[0m' # No Color
 
 generate_webgl_graph() {
     local results_file=$1
-    local output_file="time_dilation_3d_bar_graph_$(date +%Y%m%d_%H%M%S).html"
+    local output_file="time_dilation_3d_curve_$(date +%Y%m%d_%H%M%S).html" # Changed output file name to reflect curve graph
 
     # Check if a results file is provided, otherwise find the most recent one
     if [ -z "$results_file" ]; then
@@ -54,12 +54,12 @@ generate_webgl_graph() {
     fi
 
     if [ ! -f "$results_file" ]; then
-        echo -e "${RED}[ERROR] File risultati non trovato! Esegui prima una simulazione.${NC}"
+        echo -e "${RED}[ERROR] Results file not found! Please run a simulation first.${NC}"
         return 1
     fi
 
-    echo -e "${GREEN}[GRAFICO] Creazione del grafico WebGL 3D a barre...${NC}"
-    echo -e "${BLUE}Dati presi da: $results_file${NC}"
+    echo -e "${GREEN}[GRAPH] Creating 3D WebGL curve visualization...${NC}" # Updated message
+    echo -e "${BLUE}Data taken from: $results_file${NC}"
 
     # Prepare data for JavaScript
     local js_data="["
@@ -141,8 +141,8 @@ generate_webgl_graph() {
             text-align: center;
             color: #4af;
             font-size: 24px;
-/*          text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);	*/
-			text-shadow: 0 0 10px rgba(255, 100, 255, 0.7); /* Per il magenta */
+/* text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);	*/
+			text-shadow: 0 0 10px rgba(255, 100, 255, 0.7); /* For magenta */
             z-index: 100;
         }
         #legend {
@@ -281,74 +281,95 @@ generate_webgl_graph() {
         const points = new THREE.Points(pointsGeometry, pointMaterial);
         scene.add(points);
 
-        // Add Earth model at origin
-        const earthGeometry = new THREE.SphereGeometry(15, 32, 32);
-        const earthTexture = new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
-        const earthMaterial = new THREE.MeshPhongMaterial({
-            map: earthTexture,
-            specular: 0x333333,
-            shininess: 5
-        });
-        const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-        scene.add(earth);
-        
-        // Add atmosphere
-        const atmosGeometry = new THREE.SphereGeometry(15.5, 32, 32);
-        const atmosMaterial = new THREE.MeshPhongMaterial({
-            color: 0x3399ff,
-            transparent: true,
-            opacity: 0.2
-        });
-        const atmosphere = new THREE.Mesh(atmosGeometry, atmosMaterial);
-        scene.add(atmosphere);
+		// Add Earth model at origin - Enhanced brightness version
+		const earthGeometry = new THREE.SphereGeometry(20, 64, 64);  // Increased size
+		const earthTexture = new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+
+		// Brighter material with self-illumination
+		const earthMaterial = new THREE.MeshPhongMaterial({
+			map: earthTexture,
+			specular: 0xffffff,  // Brighter specular highlights
+			shininess: 100,      // More focused highlights
+			emissive: 0x224488,  // Blue self-illumination
+			emissiveIntensity: 0.8
+		});
+
+		const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+		scene.add(earth);
+
+		// Enhanced atmosphere with stronger glow
+		const atmosGeometry = new THREE.SphereGeometry(20.5, 64, 64);
+		const atmosMaterial = new THREE.MeshPhongMaterial({
+			color: 0x88ddff,     // Brighter blue
+			transparent: true,
+			opacity: 0.6,        // Less transparent
+			emissive: 0x4488ff,  // Glowing effect
+			emissiveIntensity: 0.6,
+			side: THREE.BackSide // Render inside out
+		});
+
+		const atmosphere = new THREE.Mesh(atmosGeometry, atmosMaterial);
+		scene.add(atmosphere);
+
+		// Add core glow effect
+		const coreGlowGeometry = new THREE.SphereGeometry(18, 32, 32);
+		const coreGlowMaterial = new THREE.MeshBasicMaterial({
+			color: 0x88aaff,
+			transparent: true,
+			opacity: 0.3,
+			blending: THREE.AdditiveBlending
+		});
+
+		const coreGlow = new THREE.Mesh(coreGlowGeometry, coreGlowMaterial);
+		earth.add(coreGlow);
+
+		// Add bright specular highlight
+		const highlightGeometry = new THREE.SphereGeometry(21, 32, 32);
+		const highlightMaterial = new THREE.MeshBasicMaterial({
+			color: 0xffffff,
+			transparent: true,
+			opacity: 0.2,
+			blending: THREE.AdditiveBlending
+		});
+
+		const highlight = new THREE.Mesh(highlightGeometry, highlightMaterial);
+		scene.add(highlight);
+
+		// Add directional light specifically for Earth
+		const earthLight = new THREE.PointLight(0x88ccff, 3, 200);
+		earthLight.position.set(50, 50, 50);
+		scene.add(earthLight);
 
         // Add coordinate system
         const axesHelper = new THREE.AxesHelper(Math.max(maxAltitude, maxDifference) * 1.2);
         scene.add(axesHelper);
 
         // Add labels
-//      const makeTextSprite = (text, color) => {
-//          const canvas = document.createElement('canvas');
-//          const ctx = canvas.getContext('2d');
-//          ctx.font = 'Bold 24px Arial';
-//          ctx.fillStyle = color;
-//          ctx.fillText(text, 10, 40);
-//          ctx.strokeStyle = '#000';
-//          ctx.lineWidth = 4;
-//          ctx.strokeText(text, 10, 40);
-            
-//          const texture = new THREE.CanvasTexture(canvas);
-//          const material = new THREE.SpriteMaterial({ map: texture });
-//          const sprite = new THREE.Sprite(material);
-//          sprite.scale.set(100, 40, 1);
-//          return sprite;
-//      };
-
 		const makeTextSprite = (text, color) => {
 			const canvas = document.createElement('canvas');
 			const ctx = canvas.getContext('2d');
 			
-			// Misura il testo per dimensionare correttamente il canvas
+			// Measure text to properly size the canvas
 			ctx.font = 'Bold 26px Arial';
 			const width = ctx.measureText(text).width + 40;
 			const height = 50;
 			canvas.width = width;
 			canvas.height = height;
 			
-			// Ridisegna con le nuove dimensioni
+			// Redraw with new dimensions
 			ctx.font = 'Bold 26px Arial';
 			
-			// Aggiungi ombra per migliorare la leggibilità
+			// Add shadow for better readability
 			ctx.shadowColor = '#000';
 			ctx.shadowBlur = 8;
 			ctx.shadowOffsetX = 2;
 			ctx.shadowOffsetY = 2;
 			
-			// Testo principale
+			// Main text
 			ctx.fillStyle = color;
 			ctx.fillText(text, 20, 35);
 			
-			// Contorno per aumentare il contrasto
+			// Outline to increase contrast
 			ctx.strokeStyle = '#ffffff';
 			ctx.lineWidth = 1;
 			ctx.strokeText(text, 20, 35);
@@ -364,12 +385,10 @@ generate_webgl_graph() {
 			return sprite;
 		};
 
-//      const altLabel = makeTextSprite('ALTITUDE (km)', '#4af');
-		const altLabel = makeTextSprite('ALTITUDE (km)', '#00ffff');  // Ciano brillante
+		const altLabel = makeTextSprite('ALTITUDE (km)', '#00ffff');  // Bright Cyan
         altLabel.position.set(maxAltitude * 0.8, -10, 0);
         scene.add(altLabel);
 
-//      const timeLabel = makeTextSprite('TIME DILATION (ns)', '#f8a');
 		const timeLabel = makeTextSprite('TIME DILATION (ns)', '#f8a');
         timeLabel.position.set(0, maxDifference * 5, 0);
         timeLabel.rotation.y = -Math.PI / 2;
@@ -411,44 +430,44 @@ generate_webgl_graph() {
 </html>
 EOF
 
-    echo -e "${GREEN}[GRAFICO] File creato: ${YELLOW}$output_file${NC}"
+    echo -e "${GREEN}[GRAPH] File created: ${YELLOW}$output_file${NC}"
 
-    # --- Apertura automatica del file nel browser ---
+    # --- Automatic file opening in browser ---
     case "$(uname -s)" in
         CYGWIN*|MINGW32*|MSYS*) # Windows (MSYS2, Git Bash)
             start "$output_file"
             ;;
         Linux*) # Linux
-            xdg-open "$output_file" || sensible-browser "$output_file" || google-chrome "$output_file" || firefox "$output_file" || echo -e "${YELLOW}[WARNING] Impossibile aprire automaticamente il browser. Apri manualmente: $output_file${NC}"
+            xdg-open "$output_file" || sensible-browser "$output_file" || google-chrome "$output_file" || firefox "$output_file" || echo -e "${YELLOW}[WARNING] Could not automatically open browser. Open manually: $output_file${NC}"
             ;;
         Darwin*) # macOS
             open "$output_file"
             ;;
-        *) # Altri sistemi operativi
-            echo -e "${YELLOW}[WARNING] Rilevato OS sconosciuto. Apri manualmente il file nel tuo browser: ${NC}${output_file}"
+        *) # Other operating systems
+            echo -e "${YELLOW}[WARNING] Unknown OS detected. Open the file manually in your browser: ${NC}${output_file}"
             ;;
     esac
 
-    echo -e "${BLUE}Apri il file nel tuo browser per visualizzare il grafico 3D a barre.${NC}"
+    echo -e "${BLUE}Open the file in your browser to view the 3D curve graph.${NC}" # Updated message
 }
 
 # =============================================================================
-# FUNZIONI MATEMATICHE PER DILATAZIONE TEMPORALE
+# MATHEMATICAL FUNCTIONS FOR TIME DILATION
 # =============================================================================
 
 calculate_time_dilation() {
     local altitude=$1
-    local earth_surface_time=$2 # Questo dovrebbe essere l'intervallo di tempo sulla superficie terrestre
+    local earth_surface_time=$2 # This should be the time interval on the Earth's surface
     
     local r_earth=$EARTH_RADIUS
     local r_altitude=$(echo "scale=15; $EARTH_RADIUS + $altitude" | bc -l)
-    local rs=$SCHWARZSCHILD_RADIUS # Raggio di Schwarzschild della Terra
+    local rs=$SCHWARZSCHILD_RADIUS # Earth's Schwarzschild radius
     
-    # Calcola il fattore di dilatazione per la superficie
+    # Calculate the dilation factor for the surface
     local factor_surface
     factor_surface=$(echo "scale=15; sqrt(1 - ($rs / $r_earth))" | bc -l 2>/dev/null)
     
-    # Calcola il fattore di dilatazione per l'altitudine
+    # Calculate the dilation factor for the altitude
     local factor_altitude
     factor_altitude=$(echo "scale=15; sqrt(1 - ($rs / $r_altitude))" | bc -l 2>/dev/null)
     
@@ -457,7 +476,7 @@ calculate_time_dilation() {
         return
     fi
     
-    # Calcola il rapporto tra il tempo in altitudine e il tempo sulla superficie
+    # Calculate the ratio between time at altitude and time on the surface
     # time_ratio = (factor_surface / factor_altitude)
     local time_ratio
     time_ratio=$(echo "scale=15; $factor_surface / $factor_altitude" | bc -l 2>/dev/null)
@@ -467,7 +486,7 @@ calculate_time_dilation() {
         return
     fi
     
-    # Tempo dilatato in altitudine (sarà leggermente maggiore di earth_surface_time)
+    # Dilated time at altitude (will be slightly greater than earth_surface_time)
     local dilated_time
     dilated_time=$(echo "scale=10; $earth_surface_time * $time_ratio" | bc -l 2>/dev/null)
     
@@ -482,9 +501,9 @@ calculate_time_dilation() {
 quantum_time_discretization() {
     local continuous_time=$1
     
-    # Discretizzazione quantistica del tempo (Planck time units)
-    # Simula la natura "granulare" del tempo
-    local planck_time="5.39e-44" # secondi
+    # Quantum discretization of time (Planck time units)
+    # Simulates the "granular" nature of time
+    local planck_time="5.39e-44" # seconds
     
     local quantum_units
     quantum_units=$(echo "scale=0; $continuous_time / $planck_time" | bc -l 2>/dev/null)
@@ -506,21 +525,21 @@ quantum_time_discretization() {
 }
 
 # =============================================================================
-# INTERFACCIA FPGA
+# FPGA INTERFACE
 # =============================================================================
 
 init_fpga() {
-    echo -e "${BLUE}[FPGA] Inizializzazione dispositivo...${NC}"
+    echo -e "${BLUE}[FPGA] Initializing device...${NC}"
     
-    # Controlla se dispositivo FPGA è disponibile
+    # Check if FPGA device is available
     if [ ! -c "$FPGA_DEVICE" ]; then
-        echo -e "${YELLOW}[WARNING] Dispositivo FPGA non trovato. Modalità simulazione.${NC}"
+        echo -e "${YELLOW}[WARNING] FPGA device not found. Simulation mode enabled.${NC}"
         FPGA_MODE="simulation"
     else
-        echo -e "${GREEN}[FPGA] Dispositivo connesso: $FPGA_DEVICE${NC}"
+        echo -e "${GREEN}[FPGA] Device connected: $FPGA_DEVICE${NC}"
         FPGA_MODE="hardware"
         
-        # Configura parametri seriali
+        # Configure serial parameters
         stty -F $FPGA_DEVICE 115200 cs8 -cstopb -parenb
     fi
 }
@@ -531,21 +550,21 @@ send_fpga_command() {
     local time_factor=$3
     
     if [ "$FPGA_MODE" == "hardware" ]; then
-        # Invia comando all'FPGA
+        # Send command to FPGA
         echo "CMD:$command,ALT:$altitude,TIME:$time_factor" > $FPGA_DEVICE
         
-        # Leggi risposta
+        # Read response
         local response=$(timeout 1s cat $FPGA_DEVICE)
-        echo $response
+        echo "$response"
     else
-        # Simula risposta FPGA
+        # Simulate FPGA response
         local sim_response="SIM_OK:ALT=$altitude,FACTOR=$time_factor"
-        echo $sim_response
+        echo "$sim_response"
     fi
 }
 
 # =============================================================================
-# SIMULAZIONE PRINCIPALE
+# MAIN SIMULATION
 # =============================================================================
 
 run_time_simulation() {
@@ -553,16 +572,16 @@ run_time_simulation() {
     local base_time=0
     local results_file="time_dilation_results_$(date +%Y%m%d_%H%M%S).csv"
     
-    echo -e "${GREEN}[SIM] Avvio simulazione dilatazione temporale...${NC}"
+    echo -e "${GREEN}[SIM] Starting time dilation simulation...${NC}"
     echo "Altitude(m),Earth_Time(s),Dilated_Time(s),Quantum_Time(s),Difference(ns)" > $results_file
     
     while [ $current_altitude -le $MAX_ALTITUDE ]; do
-        # Calcola dilatazione temporale
+        # Calculate time dilation
         local earth_time=$(echo "scale=10; $base_time + 1.0" | bc -l)
         local dilated_time=$(calculate_time_dilation $current_altitude $earth_time)
         local quantum_time=$(quantum_time_discretization $dilated_time)
         
-        # Calcola differenza in nanosecondi
+        # Calculate difference in nanoseconds
         local time_diff
         time_diff=$(echo "scale=2; ($dilated_time - $earth_time) * 1000000000" | bc -l 2>/dev/null)
         
@@ -570,122 +589,123 @@ run_time_simulation() {
             time_diff="0.00"
         fi
         
-        # Invia dati all'FPGA
+        # Send data to FPGA
         local fpga_response=$(send_fpga_command "TIME_CALC" $current_altitude $dilated_time)
         
-        # Salva risultati
+        # Save results
         echo "$current_altitude,$earth_time,$dilated_time,$quantum_time,$time_diff" >> $results_file
         
-        # Converti per printf (sostituisci punti con virgole se necessario)
+        # Convert for printf (replace dots with commas if necessary for some locales, though LC_NUMERIC="C" should handle it)
+        # Keeping consistent with original script's conversion for display
         local earth_time_display=$(echo $earth_time | sed 's/\./,/g')
         local dilated_time_display=$(echo $dilated_time | sed 's/\./,/g')
         local time_diff_display=$(echo $time_diff | sed 's/\./,/g')
         
-        # Output real-time
-        printf "${BLUE}Alt: %6d m${NC} | ${GREEN}Terra: %s s${NC} | ${YELLOW}Dilatato: %s s${NC} | ${RED}Diff: %s ns${NC}\n" \
+        # Real-time output
+        printf "${BLUE}Alt: %6d m${NC} | ${GREEN}Earth: %s s${NC} | ${YELLOW}Dilated: %s s${NC} | ${RED}Diff: %s ns${NC}\n" \
                $current_altitude "$earth_time_display" "$dilated_time_display" "$time_diff_display"
         
-        # Incrementa altitudine e tempo base
+        # Increment altitude and base time
         current_altitude=$((current_altitude + ALTITUDE_STEP))
         base_time=$(echo "scale=10; $base_time + 0.1" | bc -l 2>/dev/null)
         
-        # Controllo validità
+        # Validity check
         if [ $? -ne 0 ] || [ -z "$base_time" ]; then
             base_time="0.1"
         fi
         
-        # Pausa per visualizzazione
+        # Pause for visualization
         sleep 0.1
     done
     
-    echo -e "${GREEN}[SIM] Simulazione completata. Risultati salvati in: $results_file${NC}"
+    echo -e "${GREEN}[SIM] Simulation completed. Results saved to: $results_file${NC}"
 }
 
 # =============================================================================
-# ANALISI RISULTATI
+# RESULTS ANALYSIS
 # =============================================================================
 
 analyze_results() {
     local results_file=$1
     
-    echo -e "${BLUE}[ANALISI] Elaborazione dati...${NC}"
+    echo -e "${BLUE}[ANALYSIS] Processing data...${NC}"
     
-    # Trova file risultati più recente se non specificato
+    # Find most recent results file if not specified
     if [ -z "$results_file" ]; then
         results_file=$(ls -t time_dilation_results_*.csv 2>/dev/null | head -1)
     fi
     
     if [ ! -f "$results_file" ]; then
-        echo -e "${RED}[ERROR] File risultati non trovato!${NC}"
+        echo -e "${RED}[ERROR] Results file not found!${NC}"
         return 1
     fi
     
-    # Analisi statistica
+    # Statistical analysis
     local max_diff=$(tail -n +2 "$results_file" | cut -d',' -f5 | sort -n | tail -1)
     local avg_diff=$(tail -n +2 "$results_file" | cut -d',' -f5 | awk '{sum+=$1} END {if(NR>0) print sum/NR; else print 0}')
     
-    # Controlla se i valori sono validi
+    # Check if values are valid
     if [ -z "$max_diff" ]; then max_diff="0.00"; fi
     if [ -z "$avg_diff" ]; then avg_diff="0.00"; fi
     
-    echo -e "${GREEN}=== RISULTATI ANALISI ===${NC}"
-    echo -e "Differenza massima: ${YELLOW}$max_diff ns${NC}"
-    echo -e "Differenza media: ${YELLOW}$(printf "%.2f" $avg_diff 2>/dev/null || echo $avg_diff) ns${NC}"
+    echo -e "${GREEN}=== ANALYSIS RESULTS ===${NC}"
+    echo -e "Maximum difference: ${YELLOW}$max_diff ns${NC}"
+    echo -e "Average difference: ${YELLOW}$(printf "%.2f" $avg_diff 2>/dev/null || echo $avg_diff) ns${NC}"
     
-    # Genera grafico ASCII
+    # Generate ASCII graph
     generate_ascii_graph "$results_file"
 }
 
 generate_ascii_graph() {
     local file=$1
-    local max_val=50  # Scala grafico
+    local max_val=50  # Graph scale
     
-    echo -e "\n${BLUE}=== GRAFICO DILATAZIONE TEMPORALE ===${NC}"
-    echo "Altitudine (km) vs Differenza Temporale (ns)"
+    echo -e "\n${BLUE}=== TIME DILATION GRAPH ===${NC}"
+    echo "Altitude (km) vs Time Difference (ns)"
     
     tail -n +2 "$file" | while IFS=',' read -r alt earth_time dilated_time quantum_time diff; do
         local alt_km=$((alt / 1000))
         local bar_length=$(echo "scale=0; $diff * $max_val / 100" | bc -l 2>/dev/null)
         
-        # Controlla validità
+        # Check validity
         if [ $? -ne 0 ] || [ -z "$bar_length" ] || [ "$bar_length" -lt 0 ]; then
             bar_length=0
         fi
         
-        # Limita lunghezza barra
+        # Limit bar length
         if [ "$bar_length" -gt "$max_val" ]; then
             bar_length=$max_val
         fi
         
-        # Genera barra
+        # Generate bar
         local bar=""
         for ((i=0; i<bar_length; i++)); do
             bar+="█"
         done
         
-        # Visualizza con controllo errori
+        # Display with error checking
         printf "%3d km |%-${max_val}s| %s ns\n" $alt_km "$bar" "${diff:-0.00}"
     done
 }
 
 # =============================================================================
-# MENU PRINCIPALE
+# MAIN MENU
 # =============================================================================
 
 show_menu() {
-    echo -e "\n${GREEN}=== SIMULATORE DILATAZIONE TEMPORALE QUANTISTICA ===${NC}"
-    echo -e "${BLUE}1.${NC} Avvia simulazione completa"
-    echo -e "${BLUE}2.${NC} Analizza risultati esistenti"
-    echo -e "${BLUE}3.${NC} Test connessione FPGA"
-    echo -e "${BLUE}4.${NC} Simulazione rapida (10 punti)"
-    echo -e "${BLUE}5.${NC} Mostra teoria fisica"
-    echo -e "${BLUE}6.${NC} Genera grafico WebGL"
-    echo -e "${BLUE}7.${NC} Esci"
-    echo -n "Scegli opzione: "
+    echo -e "\n${GREEN}=== QUANTUM TIME DILATION SIMULATOR ===${NC}"
+    echo -e "${BLUE}1.${NC} Start full simulation"
+    echo -e "${BLUE}2.${NC} Analyze existing results"
+    echo -e "${BLUE}3.${NC} Test FPGA connection"
+    echo -e "${BLUE}4.${NC} Quick simulation (10 points)"
+    echo -e "${BLUE}5.${NC} Show physics theory"
+    echo -e "${BLUE}6.${NC} Generate WebGL graph"
+    echo -e "${BLUE}7.${NC} Exit"
+    echo -n "Choose option: "
 }
 
 quick_simulation() {
-    echo -e "${YELLOW}[QUICK] Simulazione rapida...${NC}"
+    echo -e "${YELLOW}[QUICK] Running quick simulation...${NC}"
     local original_step=$ALTITUDE_STEP
     local original_max=$MAX_ALTITUDE
     
@@ -699,32 +719,32 @@ quick_simulation() {
 }
 
 show_theory() {
-    echo -e "\n${GREEN}=== TEORIA FISICA ===${NC}"
-    echo -e "${BLUE}Dilatazione Gravitazionale:${NC}"
-    echo "- Il tempo scorre più lentamente in campi gravitazionali forti"
+    echo -e "\n${GREEN}=== PHYSICS THEORY ===${NC}"
+    echo -e "${BLUE}Gravitational Time Dilation:${NC}"
+    echo "- Time runs slower in strong gravitational fields"
     echo "- Formula: Δt = t₀ × √(1 - 2GM/rc²)"
-    echo "- Allontanandosi dalla Terra, il tempo accelera"
+    echo "- Moving away from Earth, time speeds up"
     echo ""
-    echo -e "${BLUE}Aspetti Quantistici:${NC}"
-    echo "- Tempo di Planck: 5.39×10⁻⁴⁴ secondi"
-    echo "- Possibile discretizzazione quantistica del tempo"
-    echo "- Il 'presente' come sovrapposizione quantistica"
+    echo -e "${BLUE}Quantum Aspects:${NC}"
+    echo "- Planck time: 5.39×10⁻⁴⁴ seconds"
+    echo "- Possible quantum discretization of time"
+    echo "- The 'present' as a quantum superposition"
     echo ""
-    echo -e "${BLUE}Implementazione FPGA:${NC}"
-    echo "- Calcolo parallelo di dilatazioni temporali"
-    echo "- Simulazione real-time di effetti relativistici"
-    echo "- Visualizzazione della 'nebbia temporale'"
+    echo -e "${BLUE}FPGA Implementation:${NC}"
+    echo "- Parallel calculation of time dilations"
+    echo "- Real-time simulation of relativistic effects"
+    echo "- Visualization of 'time fog'"
 }
 
 test_fpga() {
-    echo -e "${BLUE}[TEST] Verifica connessione FPGA...${NC}"
+    echo -e "${BLUE}[TEST] Checking FPGA connection...${NC}"
     init_fpga
     
     if [ "$FPGA_MODE" == "hardware" ]; then
         local test_response=$(send_fpga_command "TEST" 0 1.0)
-        echo -e "${GREEN}[TEST] Risposta FPGA: $test_response${NC}"
+        echo -e "${GREEN}[TEST] FPGA response: $test_response${NC}"
     else
-        echo -e "${YELLOW}[TEST] Modalità simulazione attiva${NC}"
+        echo -e "${YELLOW}[TEST] Simulation mode active${NC}"
     fi
 }
 
@@ -733,13 +753,13 @@ test_fpga() {
 # =============================================================================
 
 main() {
-    # Controlla dipendenze
+    # Check dependencies
     if ! command -v bc &> /dev/null; then
-        echo -e "${RED}[ERROR] bc non installato. Installa con: pacman -S bc${NC}"
+        echo -e "${RED}[ERROR] bc not installed. Install with: pacman -S bc${NC}"
         exit 1
     fi
     
-    # Inizializza FPGA
+    # Initialize FPGA
     init_fpga
     
     while true; do
@@ -751,7 +771,7 @@ main() {
                 run_time_simulation
                 ;;
             2)
-                echo -n "File risultati (invio per l'ultimo): "
+                echo -n "Results file (Enter for latest): "
                 read -r file
                 analyze_results "$file"
                 ;;
@@ -768,18 +788,18 @@ main() {
                 generate_webgl_graph ""
                 ;;
             7)
-                echo -e "${GREEN}Arrivederci!${NC}"
+                echo -e "${GREEN}Goodbye!${NC}"
                 exit 0
                 ;;
             *)
-                echo -e "${RED}Opzione non valida!${NC}"
+                echo -e "${RED}Invalid option!${NC}"
                 ;;
         esac
         
-        echo -n "Premi INVIO per continuare..."
+        echo -n "Press ENTER to continue..."
         read -r
     done
 }
 
-# Avvia programma
+# Start program
 main "$@"
