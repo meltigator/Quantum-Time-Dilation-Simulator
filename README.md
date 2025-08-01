@@ -57,15 +57,15 @@ ASCII VERSION
 
 Added enhanced version of your script with improved visualization using ASCII art ellipses to represent time dilation effects. The key improvements include:
 
-    Dynamic elliptical visualization showing distortion effects
+    * Dynamic elliptical visualization showing distortion effects
 
-    Color-coded output for better readability
+    * Color-coded output for better readability
 
-    Improved layout and information display
+    * Improved layout and information display
 
-    Better terminal handling with resize detection
+    * Better terminal handling with resize detection
 
-    Progress bar during FPGA simulation phase
+    * Progress bar during FPGA simulation phase
 
 Key improvements in this version:
 
@@ -113,7 +113,7 @@ Key improvements in this version:
 
         * Color-coded velocity information
 
-The visualization shows:
+##The visualization shows:
 
     1. Left (Blue): Lab frame reference clock (perfect circle)
 
