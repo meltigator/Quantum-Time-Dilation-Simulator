@@ -89,39 +89,39 @@ Key improvements in this version:
 
     Physics Accuracy:
 
-        Proper Lorentz factor calculation γ = 1/√(1 - v²/c²)
+        * Proper Lorentz factor calculation γ = 1/√(1 - v²/c²)
 
-        Velocity range from 0.1c to 0.99c
+        * Velocity range from 0.1c to 0.99c
 
-        Aspect ratio scaling based on time dilation factor
+        * Aspect ratio scaling based on time dilation factor
 
     Performance:
 
-        Optimized calculations using awk instead of bc
+        * Optimized calculations using awk instead of bc
 
-        Pre-generated data set for smoother animation
+        * Pre-generated data set for smoother animation
 
-        Efficient screen drawing
+        * Efficient screen drawing
 
     New Features:
 
-        Progress bar during data generation
+        * Progress bar during data generation
 
-        Auto-detection of existing data files
+        * Auto-detection of existing data files
 
-        Better error handling
+        * Better error handling
 
-        Color-coded velocity information
+        * Color-coded velocity information
 
 The visualization shows:
 
-    Left (Blue): Lab frame reference clock (perfect circle)
+    1. Left (Blue): Lab frame reference clock (perfect circle)
 
-    Right (Color-coded): Moving frame showing time dilation effects
+    2. Right (Color-coded): Moving frame showing time dilation effects
 
-    Elliptical distortion increases with velocity
+    3. Elliptical distortion increases with velocity
 
-    Color changes from green to red as velocity increases
+    4. Color changes from green to red as velocity increases
 
 The script automatically checks terminal size, generates simulation data if needed, and runs a continuous visualization of relativistic time dilation effects.
 
