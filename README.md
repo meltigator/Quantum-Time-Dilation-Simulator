@@ -1,4 +1,4 @@
-Quantum Time Dilation Simulator - FPGA Project
+# Quantum Time Dilation Simulator - FPGA Project
 
 Bridging Einstein's Relativity with Quantum Mechanics
 
