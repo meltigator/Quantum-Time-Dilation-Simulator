@@ -6,11 +6,11 @@ I've developed an open-source FPGA-based simulator that visualizes one of physic
 
 Why this matters:
 
-    Combines general relativity (gravitational time dilation) with quantum mechanics (Planck-scale discretization)
+    - Combines general relativity (gravitational time dilation) with quantum mechanics (Planck-scale discretization)
 
-    Makes tangible Einstein's prediction that clocks run faster in orbit (validated by GPS satellites)
+    - Makes tangible Einstein's prediction that clocks run faster in orbit (validated by GPS satellites)
 
-    Explores cutting-edge theories about time's quantum nature
+    - Explores cutting-edge theories about time's quantum nature
 
 Technical highlights:
 
