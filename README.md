@@ -16,27 +16,27 @@ Technical highlights:
 
 1. FPGA-accelerated physics engine
 
-    Real-time dilation calculations using √(1 - 2GM/rc²)
+   - Real-time dilation calculations using √(1 - 2GM/rc²)
 
-    Quantum time discretization at 5.39×10⁻⁴⁴s resolution
+   - Quantum time discretization at 5.39×10⁻⁴⁴s resolution
 
-    Hardware/simulation dual modes
+   - Hardware/simulation dual modes
 
 2. Immersive visualization
 
-    WebGL 3D cosmic environment
+    - WebGL 3D cosmic environment
 
-    Animated spacetime curvature models
+    - Animated spacetime curvature models
 
-    Dynamic altitude vs. time difference plots
+    - Dynamic altitude vs. time difference plots
 
 3. Cross-platform framework
 
-    MSYS2/Windows/Linux compatible
+    - MSYS2/Windows/Linux compatible
 
-    Bash control center with interactive menus
+    - Bash control center with interactive menus
 
-    CSV data pipeline for analysis
+    - CSV data pipeline for analysis
 
 The science in action:
 The simulator reveals how at 10,000m altitude, time flows ~30 nanoseconds/day faster than at sea level - a tiny but measurable effect that impacts GPS systems and proves time isn't absolute.
