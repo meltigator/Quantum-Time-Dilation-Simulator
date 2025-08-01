@@ -113,7 +113,7 @@ Key improvements in this version:
 
         * Color-coded velocity information
 
-##The visualization shows:
+## The visualization shows:
 
     1. Left (Blue): Lab frame reference clock (perfect circle)
 
