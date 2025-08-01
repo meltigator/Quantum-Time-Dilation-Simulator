@@ -43,13 +43,13 @@ The simulator reveals how at 10,000m altitude, time flows ~30 nanoseconds/day fa
 
 Perfect for STEM educators, physics enthusiasts, and engineers interested in:
 
-    Relativistic computing
+    - Relativistic computing
 
-    Quantum gravity concepts
+    - Quantum gravity concepts
 
-    FPGA scientific applications
+    - FPGA scientific applications
 
-    Physics visualization
+    - Physics visualization
 
 ----------------------------------
 ASCII VERSION
