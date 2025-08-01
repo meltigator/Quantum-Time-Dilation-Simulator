@@ -55,7 +55,7 @@ Perfect for STEM educators, physics enthusiasts, and engineers interested in:
 ASCII VERSION
 ----------------------------------
 
-Added enhanced version of your script with improved visualization using ASCII art ellipses to represent time dilation effects. The key improvements include:
+## Added enhanced version of your script with improved visualization using ASCII art ellipses to represent time dilation effects. The key improvements include:
 
     * Dynamic elliptical visualization showing distortion effects
 
@@ -67,7 +67,7 @@ Added enhanced version of your script with improved visualization using ASCII ar
 
     * Progress bar during FPGA simulation phase
 
-Key improvements in this version:
+## Key improvements in this version:
 
     Enhanced Visualization:
 
