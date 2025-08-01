@@ -79,13 +79,13 @@ Key improvements in this version:
 
     User Experience:
 
-        Terminal size checking with helpful error messages
+        * Terminal size checking with helpful error messages
 
-        FPGA simulation progress bar
+        * FPGA simulation progress bar
 
-        Clear section headers and instructions
+        * Clear section headers and instructions
 
-        Improved spacing and alignment
+        * Improved spacing and alignment
 
     Physics Accuracy:
 
