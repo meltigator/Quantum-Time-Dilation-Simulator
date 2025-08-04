@@ -1,6 +1,6 @@
-# Quantum Time Dilation Simulator - FPGA Project
+# ___Quantum Time Dilation Simulator - FPGA Project___
 
-Bridging Einstein's Relativity with Quantum Mechanics
+### Bridging Einstein's Relativity with Quantum Mechanics
 
 I've developed an open-source FPGA-based simulator that visualizes one of physics' most mind-bending phenomena: how gravity warps time itself. This project demonstrates how time accelerates as we move away from Earth - an effect measured in nanoseconds but with profound cosmic implications.
 
@@ -53,7 +53,7 @@ Perfect for STEM educators, physics enthusiasts, and engineers interested in:
     - Physics visualization
 
 ----------------------------------
-ASCII VERSION
+___ASCII VERSION___
 ----------------------------------
 
 ## Added enhanced version of your script with improved visualization using ASCII art ellipses to represent time dilation effects. The key improvements include:
